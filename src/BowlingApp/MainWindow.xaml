@@ -12,6 +12,6 @@
 	SizeToContent="WidthAndHeight">
 
 	<Grid Margin="12">
-		<view:MainView />
+		<view:MainView x:Name="MainView" />
 	</Grid>
 </Window>
