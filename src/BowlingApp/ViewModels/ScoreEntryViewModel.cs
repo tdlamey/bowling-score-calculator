@@ -35,6 +35,63 @@ namespace BowlingApp.ViewModels
 		#endregion
 
 		#region Methods
+		internal void OnKeyPressed(Key key)
+		{
+			var shotValue = ConvertKeyToString(key);
+
+			if (shotValue != null && IsScoreInputEnabled[shotValue])
+			{
+				OnScoreInput(shotValue);
+			}
+			//else
+			// The key is not a valid one, so ignore it.
+		}
+
+		private static string ConvertKeyToString(Key key)
+		{
+			switch (key)
+			{
+				case Key.X:
+					return ShotValue.Strike;
+				case Key.Divide:
+				case Key.OemBackslash:
+				case Key.Oem2:
+					return ShotValue.Spare;
+				case Key.D0:
+				case Key.NumPad0:
+					return ShotValue.Zero;
+				case Key.D1:
+				case Key.NumPad1:
+					return ShotValue.One;
+				case Key.D2:
+				case Key.NumPad2:
+					return ShotValue.Two;
+				case Key.D3:
+				case Key.NumPad3:
+					return ShotValue.Three;
+				case Key.D4:
+				case Key.NumPad4:
+					return ShotValue.Four;
+				case Key.D5:
+				case Key.NumPad5:
+					return ShotValue.Five;
+				case Key.D6:
+				case Key.NumPad6:
+					return ShotValue.Six;
+				case Key.D7:
+				case Key.NumPad7:
+					return ShotValue.Seven;
+				case Key.D8:
+				case Key.NumPad8:
+					return ShotValue.Eight;
+				case Key.D9:
+				case Key.NumPad9:
+					return ShotValue.Nine;
+				default:
+					return null;
+			}
+		}
+
 		private void OnScoreInput(string shotValue)
 		{
 			if (ShotValue.AllValues.Contains(shotValue))
