@@ -1,0 +1,63 @@
+﻿<UserControl
+	x:Class="BowlingApp.Views.ScoreEntryView"
+
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:BowlingApp"
+	xmlns:vm="clr-namespace:BowlingApp.ViewModels"
+	xmlns:converter="clr-namespace:BowlingApp.Converters"
+
+	mc:Ignorable="d"
+	d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type vm:ScoreEntryViewModel}}">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<converter:DictionaryValueConverter x:Key="DictionaryValueConverter"/>
+
+			<Style TargetType="{x:Type Button}">
+				<Setter Property="Margin" Value="4" />
+				<Setter Property="MinWidth" Value="80" />
+				<Setter Property="MinHeight" Value="40" />
+				<Setter Property="FontSize" Value="24" />
+				<Setter Property="FontWeight" Value="Bold" />
+				<Setter Property="Command" Value="{Binding ScoreInputCommand}" />
+				<Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
+				<Setter Property="IsEnabled">
+					<Setter.Value>
+						<MultiBinding Converter="{StaticResource DictionaryValueConverter}" Mode="OneWay">
+							<Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+							<Binding Path="IsScoreInputEnabled" />
+							<!-- Need to add '.Count' because a MultiBinding will not update on a CollectionChanged event. -->
+							<Binding Path="IsScoreInputEnabled.Count" />
+						</MultiBinding>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="{x:Static local:ShotValue.One}" />
+			<Button Content="{x:Static local:ShotValue.Two}" />
+			<Button Content="{x:Static local:ShotValue.Three}" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="{x:Static local:ShotValue.Four}" />
+			<Button Content="{x:Static local:ShotValue.Five}" />
+			<Button Content="{x:Static local:ShotValue.Six}" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="{x:Static local:ShotValue.Seven}" />
+			<Button Content="{x:Static local:ShotValue.Eight}" />
+			<Button Content="{x:Static local:ShotValue.Nine}" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="{x:Static local:ShotValue.Spare}" />
+			<Button Content="{x:Static local:ShotValue.Zero}" />
+			<Button Content="{x:Static local:ShotValue.Strike}" />
+		</StackPanel>
+	</StackPanel>
+</UserControl>
