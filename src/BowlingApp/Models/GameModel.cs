@@ -93,10 +93,10 @@ namespace BowlingApp.Models
 		{
 			if (!CurrentDeliveryAvailableValues.Contains(deliveryValue))
 			{
-				throw new ArgumentException("The provided value is not valid for the current shot.", nameof(deliveryValue));
+				throw new ArgumentException("The provided value is not valid for the current delivery.", nameof(deliveryValue));
 			}
 
-			//Assign the shot value.
+			//Assign the delivery value.
 			CurrentDelivery.Value = deliveryValue;
 			CurrentFrame.UpdateDeliveryDisplay();
 
@@ -115,18 +115,18 @@ namespace BowlingApp.Models
 				{
 					if (CurrentDelivery == CurrentFrame.Deliveries.First())
 					{
-						//Move to the next shot in the current frame.
+						//Move to the next delivery in the current frame.
 						MoveToNextDeliveryInFrame();
 					}
 					else
 					{
-						//This will be the second shot
+						//This will be the second delivery.
 
 						if (CurrentDelivery.IsSpare ||
 							CurrentDelivery.IsStrike ||
 							CurrentFrame.Deliveries.First().IsStrike)
 						{
-							//Move to the next shot in the current frame.
+							//Move to the next delivery in the current frame.
 							MoveToNextDeliveryInFrame();
 						}
 						else
@@ -153,7 +153,7 @@ namespace BowlingApp.Models
 					}
 					else
 					{
-						//Move to the next shot in the current frame.
+						//Move to the next delivery in the current frame.
 						MoveToNextDeliveryInFrame();
 					}
 				}
@@ -190,29 +190,29 @@ namespace BowlingApp.Models
 		/// </summary>
 		private void UpdateAvailableDeliveryValues()
 		{
-			List<string> shotValues;
+			List<string> deliveryValues;
 
 			if (CurrentDelivery == CurrentFrame.Deliveries.First())
 			{
-				shotValues = ShotValue.FirstShotValues;
+				deliveryValues = DeliveryValue.FirstDeliveryValues;
 			}
 			else
 			{
 				if (CurrentFrame.IsFinalFrame)
 				{
-					var previousShotIndex = CurrentFrame.Deliveries.IndexOf(CurrentDelivery) - 1;
-					var previousShotValue = CurrentFrame.Deliveries[previousShotIndex].Value;
+					var previousIndex = CurrentFrame.Deliveries.IndexOf(CurrentDelivery) - 1;
+					var previousValue = CurrentFrame.Deliveries[previousIndex].Value;
 
-					shotValues = ShotValue.GetNextShotValues(previousShotValue);
+					deliveryValues = DeliveryValue.GetNextDeliveryValues(previousValue);
 				}
 				else
 				{
-					shotValues = ShotValue.GetNextShotValues(CurrentFrame.Deliveries.First().Value);
+					deliveryValues = DeliveryValue.GetNextDeliveryValues(CurrentFrame.Deliveries.First().Value);
 				}
 			}
 
 			CurrentDeliveryAvailableValues.Clear();
-			CurrentDeliveryAvailableValues.AddRange(shotValues);
+			CurrentDeliveryAvailableValues.AddRange(deliveryValues);
 		}
 
 		/// <summary>
@@ -236,7 +236,7 @@ namespace BowlingApp.Models
 				// the frame score total is cleared and continue to the next frame.
 				if (frame.ShotsTaken == 0)
 				{
-					frame.FrameScoreTotal = ShotValue.NotSet;
+					frame.FrameScoreTotal = DeliveryValue.NotSet;
 					continue;
 				}
 
@@ -291,7 +291,7 @@ namespace BowlingApp.Models
 				throw new ArgumentException("Frame not found int the game.", nameof(currentFrame));
 			}
 
-			var shotReceivingBonus = currentFrame.HasStrike ? ShotValue.Strike : ShotValue.Spare;
+			var valueReceivingBonus = currentFrame.HasStrike ? DeliveryValue.Strike : DeliveryValue.Spare;
 
 			//Get the next frame.
 			// Since the current frame is eligible for a bonus score, we know it's
@@ -302,7 +302,7 @@ namespace BowlingApp.Models
 			{
 				//If the next frame is the final one, or if the current frame has only a spare,
 				// then we can only get a bonus from the very next frame.
-				bonus += nextFrame.CalculateBonusFor(shotReceivingBonus);
+				bonus += nextFrame.CalculateBonusFor(valueReceivingBonus);
 			}
 			else
 			{
@@ -310,10 +310,10 @@ namespace BowlingApp.Models
 				// has a strike and the next frame is not the final one.
 
 				//Get the next frame's bonus score.
-				bonus += nextFrame.CalculateBonusFor(shotReceivingBonus);
+				bonus += nextFrame.CalculateBonusFor(valueReceivingBonus);
 
-				//If the next frame only had one shot to give bonus points for, then
-				// attempt to get additional bonus points from the shot after that.
+				//If the next frame has only one delivery to give bonus points for,
+				// then attempt to get additional bonus points from the frame after that.
 				if (nextFrame.ShotsTaken == 1)
 				{
 					//Since we know the next frame is not the final one, we can safely get
@@ -321,8 +321,8 @@ namespace BowlingApp.Models
 					FrameModel nextFrame2 = Frames[index + 2];
 
 					//Hard-code a spare into this argument, so we only get the bonus points
-					// from the first shot, if there is one.
-					bonus += nextFrame2.CalculateBonusFor(ShotValue.Spare);
+					// from the first delivery, if there is one.
+					bonus += nextFrame2.CalculateBonusFor(DeliveryValue.Spare);
 				}
 			}
 
