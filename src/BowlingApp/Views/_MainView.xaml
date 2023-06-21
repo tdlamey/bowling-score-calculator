@@ -17,14 +17,37 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition />
+			<RowDefinition />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
+		<!-- Frame count -->
+		<StackPanel Orientation="Horizontal">
+			<StackPanel.Resources>
+				<Style TargetType="Border" BasedOn="{StaticResource FrameCountBorderStyle}" />
+				<Style TargetType="TextBlock" BasedOn="{StaticResource FrameCountTextStyle}" />
+			</StackPanel.Resources>
+			<Border><TextBlock Text="1" /></Border>
+			<Border><TextBlock Text="2" /></Border>
+			<Border><TextBlock Text="3" /></Border>
+			<Border><TextBlock Text="4" /></Border>
+			<Border><TextBlock Text="5" /></Border>
+			<Border><TextBlock Text="6" /></Border>
+			<Border><TextBlock Text="7" /></Border>
+			<Border><TextBlock Text="8" /></Border>
+			<Border><TextBlock Text="9" /></Border>
+			<Border><TextBlock Text="10" /></Border>
+			<Border BorderThickness="1,0,0,0" />
+		</StackPanel>
+
+		<!-- Frames and scoring -->
 		<view:GameView
+			Grid.Row="1"
 			DataContext="{Binding GameViewModel}" />
 
+		<!-- Score input -->
 		<view:ScoreEntryView
-			Grid.Row="1"
+			Grid.Row="2"
 			Margin="0,12,0,0"
 			HorizontalAlignment="Center"
 			DataContext="{Binding ScoreEntryViewModel}" />

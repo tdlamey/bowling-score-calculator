@@ -10,11 +10,7 @@
 	mc:Ignorable="d"
 	d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type vm:FrameViewModel}}">
 
-	<Border
-		Height="75"
-		Width="75"
-		BorderBrush="Black"
-		BorderThickness="1,1,0,1">
+	<Border Style="{StaticResource FrameBorderStyle}">
 
 		<Grid>
 			<Grid.RowDefinitions>

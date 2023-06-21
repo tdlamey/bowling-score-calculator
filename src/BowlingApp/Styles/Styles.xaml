@@ -30,6 +30,26 @@
 		<Setter Property="FontSize" Value="36" />
 	</Style>
 
+	<Style x:Key="FrameSize" TargetType="FrameworkElement">
+		<Setter Property="Width" Value="75" />
+		<Setter Property="Height" Value="75" />
+	</Style>
+
+	<Style x:Key="FrameBorderStyle" TargetType="Border" BasedOn="{StaticResource FrameSize}">
+		<Setter Property="BorderBrush" Value="Black" />
+		<Setter Property="BorderThickness" Value="1,1,0,1" />
+	</Style>
+
+	<Style x:Key="FrameCountBorderStyle" TargetType="Border" BasedOn="{StaticResource FrameSize}">
+		<Setter Property="Height" Value="25" />
+		<Setter Property="BorderBrush" Value="Black" />
+		<Setter Property="BorderThickness" Value="1,1,0,0" />
+	</Style>
+
+	<Style x:Key="FrameCountTextStyle" TargetType="TextBlock" BasedOn="{StaticResource ScoreDisplayTextStyle}">
+		<Setter Property="FontSize" Value="14" />
+	</Style>
+
 	<Style x:Key="DeliveryDisplayBorderStyle" TargetType="Border">
 		<Setter Property="Height" Value="25" />
 		<Setter Property="Width" Value="25" />
