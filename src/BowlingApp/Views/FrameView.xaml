@@ -5,11 +5,32 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:view="clr-namespace:BowlingApp.Views"
 	xmlns:vm="clr-namespace:BowlingApp.ViewModels"
+	xmlns:Converters="clr-namespace:BowlingApp.Converters"
 
 	mc:Ignorable="d"
-	d:DataContext="{d:DesignInstance Type=vm:FrameViewModel, IsDesignTimeCreatable=True}">
+	d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type vm:FrameViewModel}}">
+
+	<UserControl.Resources>
+		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+		<Style x:Key="ScoreTextStyle" TargetType="TextBlock">
+			<Setter Property="TextAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style x:Key="DeliveryStyle" TargetType="TextBlock" BasedOn="{StaticResource ScoreTextStyle}">
+			<Setter Property="FontSize" Value="16" />
+		</Style>
+		<Style x:Key="FrameScoreTotalStyle" TargetType="TextBlock" BasedOn="{StaticResource ScoreTextStyle}">
+			<Setter Property="FontSize" Value="36" />
+		</Style>
+		<Style x:Key="DeliveryBorderStyle" TargetType="Border">
+			<Setter Property="Height" Value="25" />
+			<Setter Property="Width" Value="25" />
+			<Setter Property="BorderBrush" Value="Black" />
+			<Setter Property="BorderThickness" Value="1,0,0,1" />
+		</Style>
+	</UserControl.Resources>
 
 	<Border
 		Height="75"
@@ -17,33 +38,47 @@
 		BorderBrush="Black"
 		BorderThickness="1,1,0,1">
 
-		<Grid Height="75" Width="75">
+		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition />
 			</Grid.RowDefinitions>
 
-			<ItemsControl
-				HorizontalAlignment="Right"
-				ItemsSource="{Binding FrameShotViewModels}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate DataType="vm:FrameShotViewModel">
-						<view:FrameShotView />
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Horizontal" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<Grid>
+				<Grid.Resources>
+					<Style TargetType="TextBlock" BasedOn="{StaticResource DeliveryStyle}" />
+					<Style TargetType="Border" BasedOn="{StaticResource DeliveryBorderStyle}" />
+				</Grid.Resources>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
 
+				<!-- Top-left (only used in final frame) -->
+				<TextBlock
+					Text="{Binding Model.DeliveryDisplay[0]}" />
+
+				<!-- Top-center -->
+				<Border
+					Grid.Column="1"
+					Visibility="{Binding Model.IsFinalFrame, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
+				<TextBlock
+					Grid.Column="1"
+					Text="{Binding Model.DeliveryDisplay[1]}" />
+
+				<!-- Top-right -->
+				<Border
+					Grid.Column="2" />
+				<TextBlock
+					Grid.Column="2"
+					Text="{Binding Model.DeliveryDisplay[2]}" />
+			</Grid>
+
+			<!-- Running total, as of the current frame. -->
 			<TextBlock
 				Grid.Row="1"
-				FontSize="36"
-				TextAlignment="Center"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Center"
+				Style="{StaticResource FrameScoreTotalStyle}"
 				Text="{Binding Model.FrameScoreTotal}"/>
 		</Grid>
 	</Border>

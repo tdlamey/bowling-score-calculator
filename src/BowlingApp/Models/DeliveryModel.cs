@@ -1,27 +1,19 @@
 ﻿namespace BowlingApp.Models
 {
-	public class FrameShotModel : ModelBase
+	internal class DeliveryModel
 	{
 		#region Constructor
-		internal FrameShotModel()
+		internal DeliveryModel()
 		{
-			if (IsInDesignMode)
-			{
-				Value = ShotValue.Strike;
-			}
+			Value = ShotValue.NotSet;
 		}
-		#endregion
-
-		#region Fields
-		private string shotValue = ShotValue.NotSet;
 		#endregion
 
 		#region Properties
-		public string Value
-		{
-			get => shotValue;
-			set => SetBackingFieldAndNotify(ref shotValue, value);
-		}
+		public string Value { get; set; }
+
+		internal string DisplayValue
+			=> ShotValue.GetDisplayValue(Value);
 
 		internal bool HasValue
 			=> Value != ShotValue.NotSet;
