@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace BowlingApp
 {
@@ -49,6 +50,16 @@ namespace BowlingApp
 			var mainViewModel = MainView?.DataContext as MainViewModel;
 
 			mainViewModel?.ScoreEntryViewModel?.OnKeyPressed(key);
+		}
+
+		internal void HandleExceptionGlobal(DispatcherUnhandledExceptionEventArgs e)
+		{
+			Dispatcher.CheckAndInvoke(() =>
+			{
+				MessageBox.Show(e.Exception.Message, "An error has occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+			});
+
+			e.Handled = true;
 		}
 	}
 }
