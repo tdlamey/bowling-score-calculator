@@ -68,6 +68,7 @@ namespace BowlingApp.Models
 
 			//Assign the shot value.
 			CurrentFrameShot.Value = shotValue;
+			CurrentFrame.UpdateDeliveryDisplay();
 
 			//Update the current score.
 			UpdateScore();

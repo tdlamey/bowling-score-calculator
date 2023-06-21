@@ -12,8 +12,9 @@
 	d:DataContext="{d:DesignInstance Type=vm:GameViewModel, IsDesignTimeCreatable=True}">
 
 	<StackPanel Orientation="Horizontal">
-		<ItemsControl
-			ItemsSource="{Binding FrameViewModels}">
+
+		<!-- Individual frames -->
+		<ItemsControl ItemsSource="{Binding FrameViewModels}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate DataType="vm:FrameViewModel">
 					<view:FrameView />
@@ -26,6 +27,7 @@
 			</ItemsControl.ItemsPanel>
 		</ItemsControl>
 
+		<!-- Total score -->
 		<Border
 			Width="100"
 			BorderBrush="Black"

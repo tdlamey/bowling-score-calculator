@@ -18,6 +18,8 @@ namespace BowlingApp.Models
 				FrameShots.Add(new FrameShotModel());
 			}
 
+			DeliveryDisplay = new DeliveryDisplayCollection();
+
 			FrameScoreTotal = ShotValue.NotSet;
 		}
 
@@ -26,12 +28,16 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Properties
-		internal bool IsFinalFrame { get; }
+		//No need to implement UI notification for this property because
+		// it is assigned in the constructor and cannot be changed after that.
+		public bool IsFinalFrame { get; }
 
 		private int MaxShotCount
 			=> IsFinalFrame ? 3 : 2;
 
 		internal List<FrameShotModel> FrameShots { get; }
+
+		public DeliveryDisplayCollection DeliveryDisplay { get; }
 
 		internal int ShotsTaken
 			=> FrameShots.Count(shot => shot.HasValue);
@@ -179,6 +185,31 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Methods
+		internal void UpdateDeliveryDisplay()
+		{
+			if (IsFinalFrame)
+			{
+				DeliveryDisplay[0] = FrameShots[0].DisplayValue;
+				DeliveryDisplay[1] = FrameShots[1].DisplayValue;
+				DeliveryDisplay[2] = FrameShots[2].DisplayValue;
+			}
+			else
+			{
+				DeliveryDisplay[0] = ShotValue.NotSet;
+
+				if (HasStrike)
+				{
+					DeliveryDisplay[1] = ShotValue.NotSet;
+					DeliveryDisplay[2] = FrameShots[0].DisplayValue;
+				}
+				else
+				{
+					DeliveryDisplay[1] = FrameShots[0].DisplayValue;
+					DeliveryDisplay[2] = FrameShots[1].DisplayValue;
+				}
+			}
+		}
+
 		internal int CalculateBonusFor(string previousFrameShotValue)
 		{
 			int bonus = 0;

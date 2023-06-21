@@ -23,6 +23,9 @@
 			set => SetBackingFieldAndNotify(ref shotValue, value);
 		}
 
+		internal string DisplayValue
+			=> ShotValue.GetDisplayValue(Value);
+
 		internal bool HasValue
 			=> Value != ShotValue.NotSet;
 
