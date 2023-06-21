@@ -6,4 +6,7 @@
 
 	StartupUri="MainWindow.xaml">
 
+	<Application.Resources>
+		<ResourceDictionary Source="/Styles/Styles.xaml" />
+	</Application.Resources>
 </Application>
