@@ -5,6 +5,7 @@ namespace BowlingApp
 {
 	public class ShotValue
 	{
+		#region Fields
 		internal static readonly string NotSet = string.Empty;
 
 		public const string ZeroDisplay = "-";
@@ -20,7 +21,9 @@ namespace BowlingApp
 		public const string Nine        = "9";
 		public const string Spare       = "/";
 		public const string Strike      = "X";
+		#endregion
 
+		#region Properties
 		internal static List<string> AllValues = new()
 			{ Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Spare, Strike };
 
@@ -29,7 +32,9 @@ namespace BowlingApp
 
 		internal static List<string> NumericalValues = new()
 			{ Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine };
+		#endregion
 
+		#region Methods
 		internal static string GetDisplayValue(string value)
 		{
 			return value == Zero ? ZeroDisplay : value;
@@ -63,5 +68,6 @@ namespace BowlingApp
 
 			return shotValues;
 		}
+		#endregion
 	}
 }

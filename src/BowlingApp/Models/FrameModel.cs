@@ -5,6 +5,7 @@ namespace BowlingApp.Models
 {
 	public class FrameModel : ModelBase
 	{
+		#region Constructors
 		internal FrameModel() : this(false) { }
 
 		internal FrameModel(bool isFinalFrame)
@@ -22,6 +23,7 @@ namespace BowlingApp.Models
 
 			FrameScoreTotal = ShotValue.NotSet;
 		}
+		#endregion
 
 		#region Fields
 		private string frameScoreTotal;
