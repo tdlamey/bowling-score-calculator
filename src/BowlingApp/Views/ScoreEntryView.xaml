@@ -7,21 +7,13 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:BowlingApp"
 	xmlns:vm="clr-namespace:BowlingApp.ViewModels"
-	xmlns:converter="clr-namespace:BowlingApp.Converters"
 
 	mc:Ignorable="d"
 	d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type vm:ScoreEntryViewModel}}">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
-			<converter:DictionaryValueConverter x:Key="DictionaryValueConverter"/>
-
-			<Style TargetType="{x:Type Button}">
-				<Setter Property="Margin" Value="4" />
-				<Setter Property="MinWidth" Value="80" />
-				<Setter Property="MinHeight" Value="40" />
-				<Setter Property="FontSize" Value="24" />
-				<Setter Property="FontWeight" Value="Bold" />
+			<Style TargetType="Button" BasedOn="{StaticResource ScoreInputButtonStyle}">
 				<Setter Property="Command" Value="{Binding ScoreInputCommand}" />
 				<Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
 				<Setter Property="IsEnabled">

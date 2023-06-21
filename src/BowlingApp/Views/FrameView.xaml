@@ -6,37 +6,11 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:vm="clr-namespace:BowlingApp.ViewModels"
-	xmlns:Converters="clr-namespace:BowlingApp.Converters"
 
 	mc:Ignorable="d"
 	d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type vm:FrameViewModel}}">
 
-	<UserControl.Resources>
-		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-		<Style x:Key="ScoreTextStyle" TargetType="TextBlock">
-			<Setter Property="TextAlignment" Value="Center" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="VerticalAlignment" Value="Center" />
-		</Style>
-		<Style x:Key="DeliveryStyle" TargetType="TextBlock" BasedOn="{StaticResource ScoreTextStyle}">
-			<Setter Property="FontSize" Value="16" />
-		</Style>
-		<Style x:Key="FrameScoreTotalStyle" TargetType="TextBlock" BasedOn="{StaticResource ScoreTextStyle}">
-			<Setter Property="FontSize" Value="36" />
-		</Style>
-		<Style x:Key="DeliveryBorderStyle" TargetType="Border">
-			<Setter Property="Height" Value="25" />
-			<Setter Property="Width" Value="25" />
-			<Setter Property="BorderBrush" Value="Black" />
-			<Setter Property="BorderThickness" Value="1,0,0,1" />
-		</Style>
-	</UserControl.Resources>
-
-	<Border
-		Height="75"
-		Width="75"
-		BorderBrush="Black"
-		BorderThickness="1,1,0,1">
+	<Border Style="{StaticResource FrameBorderStyle}">
 
 		<Grid>
 			<Grid.RowDefinitions>
@@ -47,8 +21,8 @@
 			<!-- Individual deliveries -->
 			<Grid>
 				<Grid.Resources>
-					<Style TargetType="TextBlock" BasedOn="{StaticResource DeliveryStyle}" />
-					<Style TargetType="Border" BasedOn="{StaticResource DeliveryBorderStyle}" />
+					<Style TargetType="TextBlock" BasedOn="{StaticResource DeliveryDisplayTextStyle}" />
+					<Style TargetType="Border" BasedOn="{StaticResource DeliveryDisplayBorderStyle}" />
 				</Grid.Resources>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition />
@@ -79,7 +53,7 @@
 			<!-- Running total, as of the current frame. -->
 			<TextBlock
 				Grid.Row="1"
-				Style="{StaticResource FrameScoreTotalStyle}"
+				Style="{StaticResource FrameScoreTotalTextStyle}"
 				Text="{Binding Model.FrameScoreTotal}"/>
 		</Grid>
 	</Border>

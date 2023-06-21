@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BowlingApp.Helpers
+namespace BowlingApp
 {
 	/// <summary>
 	/// A delegate to handle delivery value events.
