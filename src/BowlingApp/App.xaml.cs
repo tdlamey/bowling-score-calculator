@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 
 namespace BowlingApp
 {
@@ -7,5 +8,9 @@ namespace BowlingApp
 	/// </summary>
 	public partial class App : Application
 	{
+		private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		{
+			(MainWindow as MainWindow)?.HandleExceptionGlobal(e);
+		}
 	}
 }
