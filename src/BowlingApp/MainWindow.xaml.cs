@@ -10,11 +10,20 @@ namespace BowlingApp
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		/// <summary>
+		/// Creates a new instance of <see cref="MainWindow"/>.
+		/// </summary>
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
+		/// <summary>
+		/// Occurs when initialization of the user control is complete.
+		/// </summary>
+		/// <param name="e">
+		/// Event information.
+		/// </param>
 		protected override void OnInitialized(EventArgs e)
 		{
 			base.OnInitialized(e);
@@ -22,6 +31,16 @@ namespace BowlingApp
 			KeyDown += (s, e) => PassKeyToScoreInput(e.Key);
 		}
 
+		/// <summary>
+		/// Passes the keyboard input to the score input view model for processing.
+		/// </summary>
+		/// <param name="key">
+		/// The key that was pressed.
+		/// </param>
+		/// <remarks>
+		/// Attaching keyboard input at the window level allows the keys to act as
+		/// shortcuts for score input regardless of which UI element, if any, currently has focus.
+		/// </remarks>
 		private void PassKeyToScoreInput(Key key)
 		{
 			//Null value checking is not necessary here, considering the use of this method.

@@ -7,9 +7,15 @@ using System.Windows.Input;
 
 namespace BowlingApp.ViewModels
 {
+	/// <summary>
+	/// A view model for binding to the score input view.
+	/// </summary>
 	public class ScoreEntryViewModel : ViewModelBase
 	{
 		#region Constructor
+		/// <summary>
+		/// Creates a new instance of <see cref="ScoreEntryViewModel"/>.
+		/// </summary>
 		public ScoreEntryViewModel()
 		{
 			ScoreInputCommand = new ParameterizedCommand(obj => OnScoreInput(obj as string));
@@ -25,16 +31,29 @@ namespace BowlingApp.ViewModels
 		#endregion
 
 		#region Events
-		internal event ShotValueEvent ShotValueSelected;
+		/// <summary>
+		/// Occurs when a delivery value has been assigned by user input.
+		/// </summary>
+		internal event DeliveryValueEvent DeliveryValueAssigned;
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// A command to trigger when a score value is input by the user.
+		/// </summary>
 		public ICommand ScoreInputCommand { get; }
 
+		/// <summary>
+		/// A collection of score input values which are enabled for user input
+		/// </summary>
 		public ObservableDictionary<string, bool> IsScoreInputEnabled { get; }
 		#endregion
 
 		#region Methods
+		/// <summary>
+		/// Occurs when a delivery value has been assigned by user input by way of the keyboard.
+		/// </summary>
+		/// <param name="key"></param>
 		internal void OnKeyPressed(Key key)
 		{
 			var shotValue = ConvertKeyToString(key);
@@ -47,6 +66,16 @@ namespace BowlingApp.ViewModels
 			// The key is not a valid one, so ignore it.
 		}
 
+		/// <summary>
+		/// Converts a value of the <see cref="Key"/> enumeration to a valid
+		/// delivery value, or null if not valid.
+		/// </summary>
+		/// <param name="key">
+		/// The key value to convert.
+		/// </param>
+		/// <returns>
+		/// Returns the key value as a valid delivery value, or null if not valid.
+		/// </returns>
 		private static string ConvertKeyToString(Key key)
 		{
 			switch (key)
@@ -92,27 +121,49 @@ namespace BowlingApp.ViewModels
 			}
 		}
 
-		private void OnScoreInput(string shotValue)
+		/// <summary>
+		/// Occurs when a delivery value has been assigned by user input.
+		/// </summary>
+		/// <param name="deliveryValue">
+		/// The value of the individual delivery being assigned.
+		/// </param>
+		/// <exception cref="ArgumentException">
+		/// The value of <paramref name="deliveryValue"/> is not valid.
+		/// </exception>
+		private void OnScoreInput(string deliveryValue)
 		{
-			if (ShotValue.AllValues.Contains(shotValue))
+			if (ShotValue.AllValues.Contains(deliveryValue))
 			{
-				IsScoreInputEnabled[shotValue] = false;
-				ShotValueSelected?.Invoke(this, new ShotValueEventArgs(shotValue));
+				IsScoreInputEnabled[deliveryValue] = false;
+				DeliveryValueAssigned?.Invoke(this, new DeliveryValueEventArgs(deliveryValue));
 			}
 			else
 			{
-				throw new ArgumentException("Invalid entry.", nameof(shotValue));
+				throw new ArgumentException("Invalid entry.", nameof(deliveryValue));
 			}
 		}
 
+		/// <summary>
+		/// Enables the score entry values provided, and disables all others.
+		/// </summary>
+		/// <param name="scoreEntries">
+		/// The score values to enable.
+		/// </param>
+		/// <remarks>
+		/// This method is not used, but provided to demonstrate use of
+		/// overloading and of variable parameter input.
+		/// </remarks>
 		internal void SetAvailableShotValues(params string[] scoreEntries)
 		{
-			//This overload is unused, but I included it to
-			// demonstrate the usage of variable parameter input.
-
 			SetAvailableShotValues(scoreEntries.AsEnumerable());
 		}
 
+		/// <summary>
+		/// Enables the score entry values provided, and disables all others.
+		/// </summary>
+		/// <param name="scoreEntries">
+		/// The score values to enable.
+		/// </param>
 		internal void SetAvailableShotValues(IEnumerable<string> scoreEntries)
 		{
 			//Loop through the available entries, rather than looping through the
