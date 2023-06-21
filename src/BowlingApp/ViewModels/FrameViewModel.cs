@@ -13,7 +13,7 @@ namespace BowlingApp.ViewModels
 				{
 					FrameScoreTotal = "150"
 				};
-				Model.FrameShots.First().Value = ShotValue.Strike;
+				Model.Deliveries.First().Value = ShotValue.Strike;
 				Model.UpdateDeliveryDisplay();
 			}
 		}

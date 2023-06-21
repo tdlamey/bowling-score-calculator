@@ -18,12 +18,12 @@ namespace BowlingApp.ViewModels
 		{
 			scoreEntryViewModel.ShotValueSelected += (s, e) => Model.OnShotValueAssigned(e.Value);
 
-			Model.CurrentFrameShotAvailableValues.CollectionChanged += (s, e) =>
+			Model.CurrentDeliveryAvailableValues.CollectionChanged += (s, e) =>
 			{
-				scoreEntryViewModel.SetAvailableShotValues(Model.CurrentFrameShotAvailableValues);
+				scoreEntryViewModel.SetAvailableShotValues(Model.CurrentDeliveryAvailableValues);
 			};
 
-			scoreEntryViewModel.SetAvailableShotValues(Model.CurrentFrameShotAvailableValues);
+			scoreEntryViewModel.SetAvailableShotValues(Model.CurrentDeliveryAvailableValues);
 		}
 
 		public ObservableCollection<FrameViewModel> FrameViewModels { get; }

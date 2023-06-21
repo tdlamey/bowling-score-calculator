@@ -20,9 +20,9 @@ namespace BowlingApp.Models
 			Frames.Add(new FrameModel(true));
 
 			CurrentFrame = Frames.First();
-			CurrentFrameShot = CurrentFrame.FrameShots.First();
+			CurrentDelivery = CurrentFrame.Deliveries.First();
 
-			CurrentFrameShotAvailableValues = new ObservableCollection<string>();
+			CurrentDeliveryAvailableValues = new ObservableCollection<string>();
 
 			UpdateAvailableShotValues();
 		}
@@ -30,7 +30,7 @@ namespace BowlingApp.Models
 
 		#region Fields
 		private FrameModel currentFrame;
-		private FrameShotModel currentFrameShot;
+		private DeliveryModel currentDelivery;
 		private int totalScore;
 		#endregion
 
@@ -43,13 +43,13 @@ namespace BowlingApp.Models
 			set => SetBackingFieldAndNotify(ref currentFrame, value);
 		}
 
-		private FrameShotModel CurrentFrameShot
+		private DeliveryModel CurrentDelivery
 		{
-			get => currentFrameShot;
-			set => SetBackingFieldAndNotify(ref currentFrameShot, value);
+			get => currentDelivery;
+			set => SetBackingFieldAndNotify(ref currentDelivery, value);
 		}
 
-		internal ObservableCollection<string> CurrentFrameShotAvailableValues { get; }
+		internal ObservableCollection<string> CurrentDeliveryAvailableValues { get; }
 
 		public int TotalScore
 		{
@@ -61,13 +61,13 @@ namespace BowlingApp.Models
 		#region Methods
 		internal void OnShotValueAssigned(string shotValue)
 		{
-			if (!CurrentFrameShotAvailableValues.Contains(shotValue))
+			if (!CurrentDeliveryAvailableValues.Contains(shotValue))
 			{
 				throw new ArgumentException("The provided value is not valid for the current shot.", nameof(shotValue));
 			}
 
 			//Assign the shot value.
-			CurrentFrameShot.Value = shotValue;
+			CurrentDelivery.Value = shotValue;
 			CurrentFrame.UpdateDeliveryDisplay();
 
 			//Update the current score.
@@ -76,14 +76,14 @@ namespace BowlingApp.Models
 			//Determine what to do next.
 			if (CurrentFrame.IsFinalFrame)
 			{
-				if (CurrentFrameShot == CurrentFrame.FrameShots.Last())
+				if (CurrentDelivery == CurrentFrame.Deliveries.Last())
 				{
 					//Disable all input and do nothing else.
 					DisableInput();
 				}
 				else
 				{
-					if (CurrentFrameShot == CurrentFrame.FrameShots.First())
+					if (CurrentDelivery == CurrentFrame.Deliveries.First())
 					{
 						//Move to the next shot in the current frame.
 						MoveToNextShotInFrame();
@@ -92,9 +92,9 @@ namespace BowlingApp.Models
 					{
 						//This will be the second shot
 
-						if (CurrentFrameShot.IsSpare ||
-							CurrentFrameShot.IsStrike ||
-							CurrentFrame.FrameShots.First().IsStrike)
+						if (CurrentDelivery.IsSpare ||
+							CurrentDelivery.IsStrike ||
+							CurrentFrame.Deliveries.First().IsStrike)
 						{
 							//Move to the next shot in the current frame.
 							MoveToNextShotInFrame();
@@ -109,14 +109,14 @@ namespace BowlingApp.Models
 			}
 			else
 			{
-				if (CurrentFrameShot == CurrentFrame.FrameShots.Last())
+				if (CurrentDelivery == CurrentFrame.Deliveries.Last())
 				{
 					//Move to next frame.
 					MoveToNextFrame();
 				}
 				else
 				{
-					if (CurrentFrameShot.IsStrike)
+					if (CurrentDelivery.IsStrike)
 					{
 						//Move to the next frame.
 						MoveToNextFrame();
@@ -135,16 +135,16 @@ namespace BowlingApp.Models
 			var next = Frames.IndexOf(CurrentFrame) + 1;
 
 			CurrentFrame = Frames[next];
-			CurrentFrameShot = CurrentFrame.FrameShots.First();
+			CurrentDelivery = CurrentFrame.Deliveries.First();
 
 			UpdateAvailableShotValues();
 		}
 
 		private void MoveToNextShotInFrame()
 		{
-			var next = CurrentFrame.FrameShots.IndexOf(CurrentFrameShot) + 1;
+			var next = CurrentFrame.Deliveries.IndexOf(CurrentDelivery) + 1;
 
-			CurrentFrameShot = CurrentFrame.FrameShots[next];
+			CurrentDelivery = CurrentFrame.Deliveries[next];
 
 			UpdateAvailableShotValues();
 		}
@@ -153,7 +153,7 @@ namespace BowlingApp.Models
 		{
 			List<string> shotValues;
 
-			if (CurrentFrameShot == CurrentFrame.FrameShots.First())
+			if (CurrentDelivery == CurrentFrame.Deliveries.First())
 			{
 				shotValues = ShotValue.FirstShotValues;
 			}
@@ -161,24 +161,24 @@ namespace BowlingApp.Models
 			{
 				if (CurrentFrame.IsFinalFrame)
 				{
-					var previousShotIndex = CurrentFrame.FrameShots.IndexOf(CurrentFrameShot) - 1;
-					var previousShotValue = CurrentFrame.FrameShots[previousShotIndex].Value;
+					var previousShotIndex = CurrentFrame.Deliveries.IndexOf(CurrentDelivery) - 1;
+					var previousShotValue = CurrentFrame.Deliveries[previousShotIndex].Value;
 
 					shotValues = ShotValue.GetNextShotValues(previousShotValue);
 				}
 				else
 				{
-					shotValues = ShotValue.GetNextShotValues(CurrentFrame.FrameShots.First().Value);
+					shotValues = ShotValue.GetNextShotValues(CurrentFrame.Deliveries.First().Value);
 				}
 			}
 
-			CurrentFrameShotAvailableValues.Clear();
-			CurrentFrameShotAvailableValues.AddRange(shotValues);
+			CurrentDeliveryAvailableValues.Clear();
+			CurrentDeliveryAvailableValues.AddRange(shotValues);
 		}
 
 		private void DisableInput()
 		{
-			CurrentFrameShotAvailableValues.Clear();
+			CurrentDeliveryAvailableValues.Clear();
 		}
 
 		private void UpdateScore()

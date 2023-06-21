@@ -11,11 +11,11 @@ namespace BowlingApp.Models
 		{
 			IsFinalFrame = isFinalFrame;
 
-			FrameShots = new List<FrameShotModel>();
+			Deliveries = new List<DeliveryModel>();
 
 			for (int i = 0; i < MaxShotCount; i++)
 			{
-				FrameShots.Add(new FrameShotModel());
+				Deliveries.Add(new DeliveryModel());
 			}
 
 			DeliveryDisplay = new DeliveryDisplayCollection();
@@ -35,31 +35,18 @@ namespace BowlingApp.Models
 		private int MaxShotCount
 			=> IsFinalFrame ? 3 : 2;
 
-		internal List<FrameShotModel> FrameShots { get; }
+		internal List<DeliveryModel> Deliveries { get; }
 
 		public DeliveryDisplayCollection DeliveryDisplay { get; }
 
 		internal int ShotsTaken
-			=> FrameShots.Count(shot => shot.HasValue);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <remarks>
-		/// This score value is a string so that it can be
-		/// blank in frames which have not yet been recorded.
-		/// </remarks>
-		public string FrameScoreTotal
-		{
-			get => frameScoreTotal;
-			set => SetBackingFieldAndNotify(ref frameScoreTotal, value);
-		}
+			=> Deliveries.Count(shot => shot.HasValue);
 
 		internal bool HasStrike
-			=> FrameShots.Any(shot => shot.IsStrike);
+			=> Deliveries.Any(shot => shot.IsStrike);
 
 		internal bool HasSpare
-			=> FrameShots.Any(shot => shot.IsSpare);
+			=> Deliveries.Any(shot => shot.IsSpare);
 
 		internal bool GetsBonusScore
 			=> !IsFinalFrame && (HasStrike || HasSpare);
@@ -70,39 +57,39 @@ namespace BowlingApp.Models
 			{
 				int subtotal;
 
-				if (!FrameShots.First().HasValue)
+				if (!Deliveries.First().HasValue)
 				{
 					return 0;
 				}
-				else if (FrameShots.First().IsStrike)
+				else if (Deliveries.First().IsStrike)
 				{
 					subtotal = 10;
 
 					if (IsFinalFrame)
 					{
-						if (FrameShots[1].HasValue)
+						if (Deliveries[1].HasValue)
 						{
-							if (FrameShots[1].IsStrike)
+							if (Deliveries[1].IsStrike)
 							{
 								subtotal += 10;
 
-								if (FrameShots.Last().HasValue)
+								if (Deliveries.Last().HasValue)
 								{
-									if (FrameShots.Last().IsStrike)
+									if (Deliveries.Last().IsStrike)
 									{
 										subtotal += 10;
 									}
 									else
 									{
 										//This code block indicates that the last shot must have a value and it is numerical.
-										subtotal += FrameShots.Last().AsNumericalValue;
+										subtotal += Deliveries.Last().AsNumericalValue;
 									}
 								}
 								//else
 								// There is no final shot taken yet.
 								// Return the subtotal as-is.
 							}
-							else if (FrameShots.Last().IsSpare)
+							else if (Deliveries.Last().IsSpare)
 							{
 								//This code block indicates that the second shot was numerical and the third was a spare.
 								subtotal += 10;
@@ -111,14 +98,14 @@ namespace BowlingApp.Models
 							{
 								//This code block indicates that the second shot was taken and has a numerical value.
 								// It also indicates that the last shot is not a spare, so the numerical values can be added to the subtotal as-is.
-								subtotal += FrameShots[1].AsNumericalValue;
+								subtotal += Deliveries[1].AsNumericalValue;
 
 								//Since the second shot is numerical and the last shot is not a spare, the only
 								// remaining possibilities for the last shot are a numerical value or yet not recorded.
 
-								if (FrameShots.Last().HasValue)
+								if (Deliveries.Last().HasValue)
 								{
-									subtotal += FrameShots.Last().AsNumericalValue;
+									subtotal += Deliveries.Last().AsNumericalValue;
 								}
 								//else
 								// There is no final shot taken yet.
@@ -137,27 +124,27 @@ namespace BowlingApp.Models
 				{
 					//This else-block indicates the first shot has a value and it is numerical.
 
-					if (!FrameShots[1].HasValue)
+					if (!Deliveries[1].HasValue)
 					{
 						//Only the first shot has been taken, so return its numerical value.
-						subtotal = FrameShots.First().AsNumericalValue;
+						subtotal = Deliveries.First().AsNumericalValue;
 					}
-					else if (FrameShots[1].IsSpare)
+					else if (Deliveries[1].IsSpare)
 					{
 						subtotal = 10;
 
 						if (IsFinalFrame)
 						{
-							if (FrameShots.Last().HasValue)
+							if (Deliveries.Last().HasValue)
 							{
-								if (FrameShots.Last().IsStrike)
+								if (Deliveries.Last().IsStrike)
 								{
 									subtotal += 10;
 								}
 								else
 								{
 									//This else-block indicates that the last shot has been taken, and it is a numerical value.
-									subtotal += FrameShots.Last().AsNumericalValue;
+									subtotal += Deliveries.Last().AsNumericalValue;
 								}
 							}
 							//else
@@ -174,13 +161,26 @@ namespace BowlingApp.Models
 						// both shots having numerical values.
 						// This includes the final frame, which in this case will only
 						// have 2 shots taken but is still complete.
-						subtotal  = FrameShots[0].AsNumericalValue;
-						subtotal += FrameShots[1].AsNumericalValue;
+						subtotal  = Deliveries[0].AsNumericalValue;
+						subtotal += Deliveries[1].AsNumericalValue;
 					}
 				}
 
 				return subtotal;
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <remarks>
+		/// This score value is a string so that it can be
+		/// blank in frames which have not yet been recorded.
+		/// </remarks>
+		public string FrameScoreTotal
+		{
+			get => frameScoreTotal;
+			set => SetBackingFieldAndNotify(ref frameScoreTotal, value);
 		}
 		#endregion
 
@@ -189,9 +189,9 @@ namespace BowlingApp.Models
 		{
 			if (IsFinalFrame)
 			{
-				DeliveryDisplay[0] = FrameShots[0].DisplayValue;
-				DeliveryDisplay[1] = FrameShots[1].DisplayValue;
-				DeliveryDisplay[2] = FrameShots[2].DisplayValue;
+				DeliveryDisplay[0] = Deliveries[0].DisplayValue;
+				DeliveryDisplay[1] = Deliveries[1].DisplayValue;
+				DeliveryDisplay[2] = Deliveries[2].DisplayValue;
 			}
 			else
 			{
@@ -200,21 +200,21 @@ namespace BowlingApp.Models
 				if (HasStrike)
 				{
 					DeliveryDisplay[1] = ShotValue.NotSet;
-					DeliveryDisplay[2] = FrameShots[0].DisplayValue;
+					DeliveryDisplay[2] = Deliveries[0].DisplayValue;
 				}
 				else
 				{
-					DeliveryDisplay[1] = FrameShots[0].DisplayValue;
-					DeliveryDisplay[2] = FrameShots[1].DisplayValue;
+					DeliveryDisplay[1] = Deliveries[0].DisplayValue;
+					DeliveryDisplay[2] = Deliveries[1].DisplayValue;
 				}
 			}
 		}
 
-		internal int CalculateBonusFor(string previousFrameShotValue)
+		internal int CalculateBonusFor(string previousDeliveryValue)
 		{
 			int bonus = 0;
 
-			if (previousFrameShotValue == ShotValue.Strike)
+			if (previousDeliveryValue == ShotValue.Strike)
 			{
 				if (ShotsTaken <= 2)
 				{
@@ -224,44 +224,44 @@ namespace BowlingApp.Models
 				{
 					//Three shots have been taken, so calculate the total of the first two.
 
-					if (FrameShots[1].IsSpare)
+					if (Deliveries[1].IsSpare)
 					{
 						return 10;
 					}
-					else if (FrameShots.First().IsStrike)
+					else if (Deliveries.First().IsStrike)
 					{
 						bonus += 10;
 
-						if (FrameShots[1].IsStrike)
+						if (Deliveries[1].IsStrike)
 						{
 							bonus += 10;
 						}
 						else
 						{
 							//The second shot must have a numerical value.
-							bonus += FrameShots[1].AsNumericalValue;
+							bonus += Deliveries[1].AsNumericalValue;
 						}
 					}
 					else
 					{
 						//The first and second shots must both be numerical values.
-						bonus += FrameShots[0].AsNumericalValue;
-						bonus += FrameShots[1].AsNumericalValue;
+						bonus += Deliveries[0].AsNumericalValue;
+						bonus += Deliveries[1].AsNumericalValue;
 					}
 				}
 			}
-			else if (previousFrameShotValue == ShotValue.Spare)
+			else if (previousDeliveryValue == ShotValue.Spare)
 			{
-				if (FrameShots.First().HasValue)
+				if (Deliveries.First().HasValue)
 				{
-					if (FrameShots.First().IsStrike)
+					if (Deliveries.First().IsStrike)
 					{
 						bonus += 10;
 					}
 					else
 					{
 						//The first shot must be numerical.
-						bonus += FrameShots.First().AsNumericalValue;
+						bonus += Deliveries.First().AsNumericalValue;
 					}
 				}
 				//else
