@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace BowlingApp
 {
 	/// <summary>
-	/// A class for providing general information about individual shot values.
+	/// A class for providing general information about individual delivery values.
 	/// </summary>
-	public class ShotValue
+	public class DeliveryValue
 	{
 		#region Fields
 		internal static readonly string NotSet = string.Empty;
@@ -36,7 +36,7 @@ namespace BowlingApp
 		/// <summary>
 		/// All possible values for a first delivery.
 		/// </summary>
-		internal static List<string> FirstShotValues = new()
+		internal static List<string> FirstDeliveryValues = new()
 			{ Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Strike };
 
 		/// <summary>
@@ -64,42 +64,42 @@ namespace BowlingApp
 		/// <summary>
 		/// Returns the next possible delivery values, based on the previous delivery.
 		/// </summary>
-		/// <param name="previousShotValue">
+		/// <param name="previousDeliveryValue">
 		/// The value of the previous delivery.
 		/// </param>
 		/// <returns>
 		/// Returns the next possible delivery values, based on the previous delivery.
 		/// </returns>
 		/// <exception cref="ArgumentException">
-		/// The value passed in <paramref name="previousShotValue"/> is not a valid value.
+		/// The value passed in <paramref name="previousDeliveryValue"/> is not a valid value.
 		/// </exception>
-		internal static List<string> GetNextShotValues(string previousShotValue)
+		internal static List<string> GetNextDeliveryValues(string previousDeliveryValue)
 		{
-			if (previousShotValue == Strike || previousShotValue == Spare)
+			if (previousDeliveryValue == Strike || previousDeliveryValue == Spare)
 			{
-				return FirstShotValues;
+				return FirstDeliveryValues;
 			}
 
-			if (!NumericalValues.Contains(previousShotValue))
+			if (!NumericalValues.Contains(previousDeliveryValue))
 			{
-				throw new ArgumentException("Invalid argument value.", nameof(previousShotValue));
+				throw new ArgumentException("Invalid argument value.", nameof(previousDeliveryValue));
 			}
 
-			int previousShot = int.Parse(previousShotValue);
+			int previousDelivery = int.Parse(previousDeliveryValue);
 
-			var shotValues = new List<string>();
+			var nextDeliveryValues = new List<string>();
 
-			foreach (var shotValue in NumericalValues)
+			foreach (var value in NumericalValues)
 			{
-				if (10 > previousShot + int.Parse(shotValue))
+				if (10 > previousDelivery + int.Parse(value))
 				{
-					shotValues.Add(shotValue);
+					nextDeliveryValues.Add(value);
 				}
 			}
 
-			shotValues.Add(Spare);
+			nextDeliveryValues.Add(Spare);
 
-			return shotValues;
+			return nextDeliveryValues;
 		}
 		#endregion
 	}

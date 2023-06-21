@@ -40,24 +40,24 @@
 
 	<StackPanel>
 		<StackPanel Orientation="Horizontal">
-			<Button Content="{x:Static local:ShotValue.One}" />
-			<Button Content="{x:Static local:ShotValue.Two}" />
-			<Button Content="{x:Static local:ShotValue.Three}" />
+			<Button Content="{x:Static local:DeliveryValue.One}" />
+			<Button Content="{x:Static local:DeliveryValue.Two}" />
+			<Button Content="{x:Static local:DeliveryValue.Three}" />
 		</StackPanel>
 		<StackPanel Orientation="Horizontal">
-			<Button Content="{x:Static local:ShotValue.Four}" />
-			<Button Content="{x:Static local:ShotValue.Five}" />
-			<Button Content="{x:Static local:ShotValue.Six}" />
+			<Button Content="{x:Static local:DeliveryValue.Four}" />
+			<Button Content="{x:Static local:DeliveryValue.Five}" />
+			<Button Content="{x:Static local:DeliveryValue.Six}" />
 		</StackPanel>
 		<StackPanel Orientation="Horizontal">
-			<Button Content="{x:Static local:ShotValue.Seven}" />
-			<Button Content="{x:Static local:ShotValue.Eight}" />
-			<Button Content="{x:Static local:ShotValue.Nine}" />
+			<Button Content="{x:Static local:DeliveryValue.Seven}" />
+			<Button Content="{x:Static local:DeliveryValue.Eight}" />
+			<Button Content="{x:Static local:DeliveryValue.Nine}" />
 		</StackPanel>
 		<StackPanel Orientation="Horizontal">
-			<Button Content="{x:Static local:ShotValue.Spare}" />
-			<Button Content="{x:Static local:ShotValue.Zero}" />
-			<Button Content="{x:Static local:ShotValue.Strike}" />
+			<Button Content="{x:Static local:DeliveryValue.Spare}" />
+			<Button Content="{x:Static local:DeliveryValue.Zero}" />
+			<Button Content="{x:Static local:DeliveryValue.Strike}" />
 		</StackPanel>
 	</StackPanel>
 </UserControl>

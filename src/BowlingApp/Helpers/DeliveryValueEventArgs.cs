@@ -37,7 +37,7 @@ namespace BowlingApp.Helpers
 				throw new ArgumentNullException();
 			}
 
-			if (!ShotValue.AllValues.Contains(value))
+			if (!DeliveryValue.AllValues.Contains(value))
 			{
 				throw new ArgumentException();
 			}

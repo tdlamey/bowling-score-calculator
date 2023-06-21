@@ -11,7 +11,7 @@
 		/// </summary>
 		internal DeliveryModel()
 		{
-			Value = ShotValue.NotSet;
+			Value = DeliveryValue.NotSet;
 		}
 		#endregion
 
@@ -25,31 +25,31 @@
 		/// Converts the delivery to a display value.
 		/// </summary>
 		internal string DisplayValue
-			=> ShotValue.GetDisplayValue(Value);
+			=> DeliveryValue.GetDisplayValue(Value);
 
 		/// <summary>
 		/// Determines whether the delivery has a value recorded.
 		/// </summary>
 		internal bool HasValue
-			=> Value != ShotValue.NotSet;
+			=> Value != DeliveryValue.NotSet;
 
 		/// <summary>
 		/// Determines whether the delivery is a strike.
 		/// </summary>
 		internal bool IsStrike
-			=> Value == ShotValue.Strike;
+			=> Value == DeliveryValue.Strike;
 
 		/// <summary>
 		/// Determines whether the delivery is a spare.
 		/// </summary>
 		internal bool IsSpare
-			=> Value == ShotValue.Spare;
+			=> Value == DeliveryValue.Spare;
 
 		/// <summary>
 		/// Determines whether the delivery is a numerical value.
 		/// </summary>
 		internal bool IsNumerical
-			=> ShotValue.NumericalValues.Contains(Value);
+			=> DeliveryValue.NumericalValues.Contains(Value);
 
 		/// <summary>
 		/// Converts the delivery's value to a pin count.

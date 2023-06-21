@@ -33,7 +33,7 @@ namespace BowlingApp.Models
 
 			DeliveryDisplay = new DeliveryDisplayCollection();
 
-			FrameScoreTotal = ShotValue.NotSet;
+			FrameScoreTotal = DeliveryValue.NotSet;
 		}
 		#endregion
 
@@ -75,19 +75,19 @@ namespace BowlingApp.Models
 		/// The count of how many shots have been taken.
 		/// </summary>
 		internal int ShotsTaken
-			=> Deliveries.Count(shot => shot.HasValue);
+			=> Deliveries.Count(delivery => delivery.HasValue);
 
 		/// <summary>
 		/// Indicates whether the frame has a strike value.
 		/// </summary>
 		internal bool HasStrike
-			=> Deliveries.Any(shot => shot.IsStrike);
+			=> Deliveries.Any(delivery => delivery.IsStrike);
 
 		/// <summary>
 		/// Indicates whether the frame has a spare value.
 		/// </summary>
 		internal bool HasSpare
-			=> Deliveries.Any(shot => shot.IsSpare);
+			=> Deliveries.Any(delivery => delivery.IsSpare);
 
 		/// <summary>
 		/// Indicates whether the frame is eligible for a score bonus.
@@ -250,11 +250,11 @@ namespace BowlingApp.Models
 			}
 			else
 			{
-				DeliveryDisplay[0] = ShotValue.NotSet;
+				DeliveryDisplay[0] = DeliveryValue.NotSet;
 
 				if (HasStrike)
 				{
-					DeliveryDisplay[1] = ShotValue.NotSet;
+					DeliveryDisplay[1] = DeliveryValue.NotSet;
 					DeliveryDisplay[2] = Deliveries[0].DisplayValue;
 				}
 				else
@@ -279,7 +279,7 @@ namespace BowlingApp.Models
 		{
 			int bonus = 0;
 
-			if (previousDeliveryValue == ShotValue.Strike)
+			if (previousDeliveryValue == DeliveryValue.Strike)
 			{
 				if (ShotsTaken <= 2)
 				{
@@ -315,7 +315,7 @@ namespace BowlingApp.Models
 					}
 				}
 			}
-			else if (previousDeliveryValue == ShotValue.Spare)
+			else if (previousDeliveryValue == DeliveryValue.Spare)
 			{
 				if (Deliveries.First().HasValue)
 				{

@@ -23,9 +23,9 @@ namespace BowlingApp.ViewModels
 			IsScoreInputEnabled = new ObservableDictionary<string, bool>();
 
 			//Populate the dictionary for each button
-			foreach (var shotValue in ShotValue.AllValues)
+			foreach (var value in DeliveryValue.AllValues)
 			{
-				IsScoreInputEnabled.Add(shotValue, true);
+				IsScoreInputEnabled.Add(value, true);
 			}
 		}
 		#endregion
@@ -56,11 +56,11 @@ namespace BowlingApp.ViewModels
 		/// <param name="key"></param>
 		internal void OnKeyPressed(Key key)
 		{
-			var shotValue = ConvertKeyToString(key);
+			var value = ConvertKeyToString(key);
 
-			if (shotValue != null && IsScoreInputEnabled[shotValue])
+			if (value != null && IsScoreInputEnabled[value])
 			{
-				OnScoreInput(shotValue);
+				OnScoreInput(value);
 			}
 			//else
 			// The key is not a valid one, so ignore it.
@@ -81,41 +81,41 @@ namespace BowlingApp.ViewModels
 			switch (key)
 			{
 				case Key.X:
-					return ShotValue.Strike;
+					return DeliveryValue.Strike;
 				case Key.Divide:
 				case Key.OemBackslash:
 				case Key.Oem2:
-					return ShotValue.Spare;
+					return DeliveryValue.Spare;
 				case Key.D0:
 				case Key.NumPad0:
-					return ShotValue.Zero;
+					return DeliveryValue.Zero;
 				case Key.D1:
 				case Key.NumPad1:
-					return ShotValue.One;
+					return DeliveryValue.One;
 				case Key.D2:
 				case Key.NumPad2:
-					return ShotValue.Two;
+					return DeliveryValue.Two;
 				case Key.D3:
 				case Key.NumPad3:
-					return ShotValue.Three;
+					return DeliveryValue.Three;
 				case Key.D4:
 				case Key.NumPad4:
-					return ShotValue.Four;
+					return DeliveryValue.Four;
 				case Key.D5:
 				case Key.NumPad5:
-					return ShotValue.Five;
+					return DeliveryValue.Five;
 				case Key.D6:
 				case Key.NumPad6:
-					return ShotValue.Six;
+					return DeliveryValue.Six;
 				case Key.D7:
 				case Key.NumPad7:
-					return ShotValue.Seven;
+					return DeliveryValue.Seven;
 				case Key.D8:
 				case Key.NumPad8:
-					return ShotValue.Eight;
+					return DeliveryValue.Eight;
 				case Key.D9:
 				case Key.NumPad9:
-					return ShotValue.Nine;
+					return DeliveryValue.Nine;
 				default:
 					return null;
 			}
@@ -132,7 +132,7 @@ namespace BowlingApp.ViewModels
 		/// </exception>
 		private void OnScoreInput(string deliveryValue)
 		{
-			if (ShotValue.AllValues.Contains(deliveryValue))
+			if (DeliveryValue.AllValues.Contains(deliveryValue))
 			{
 				IsScoreInputEnabled[deliveryValue] = false;
 				DeliveryValueAssigned?.Invoke(this, new DeliveryValueEventArgs(deliveryValue));
@@ -153,9 +153,9 @@ namespace BowlingApp.ViewModels
 		/// This method is not used, but provided to demonstrate use of
 		/// overloading and of variable parameter input.
 		/// </remarks>
-		internal void SetAvailableShotValues(params string[] scoreEntries)
+		internal void SetAvailableScoreEntries(params string[] scoreEntries)
 		{
-			SetAvailableShotValues(scoreEntries.AsEnumerable());
+			SetAvailableScoreEntries(scoreEntries.AsEnumerable());
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace BowlingApp.ViewModels
 		/// <param name="scoreEntries">
 		/// The score values to enable.
 		/// </param>
-		internal void SetAvailableShotValues(IEnumerable<string> scoreEntries)
+		internal void SetAvailableScoreEntries(IEnumerable<string> scoreEntries)
 		{
 			//Loop through the available entries, rather than looping through the
 			// provided "available" entries, so invalid arguments will not cause issues

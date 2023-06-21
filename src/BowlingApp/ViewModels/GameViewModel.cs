@@ -32,10 +32,10 @@ namespace BowlingApp.ViewModels
 
 			Model.CurrentDeliveryAvailableValues.CollectionChanged += (s, e) =>
 			{
-				scoreEntryViewModel.SetAvailableShotValues(Model.CurrentDeliveryAvailableValues);
+				scoreEntryViewModel.SetAvailableScoreEntries(Model.CurrentDeliveryAvailableValues);
 			};
 
-			scoreEntryViewModel.SetAvailableShotValues(Model.CurrentDeliveryAvailableValues);
+			scoreEntryViewModel.SetAvailableScoreEntries(Model.CurrentDeliveryAvailableValues);
 		}
 
 		/// <summary>

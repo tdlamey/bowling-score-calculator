@@ -8,7 +8,7 @@ namespace BowlingApp.Models
 	/// <remarks>
 	/// Use of this custom class will ensure that the collection always contains exactly 3 items.
 	/// If at any point an attempt is made to remove one or more items, they will not actually be removed,
-	/// but instead the item at that index will simply be set to the <see cref="ShotValue.NotSet"/> value.
+	/// but instead the item at that index will simply be set to the <see cref="DeliveryValue.NotSet"/> value.
 	/// </remarks>
 	public class DeliveryDisplayCollection : ObservableCollection<string>
 	{
@@ -17,30 +17,30 @@ namespace BowlingApp.Models
 		/// </summary>
 		public DeliveryDisplayCollection()
 		{
-			Add(ShotValue.NotSet);
-			Add(ShotValue.NotSet);
-			Add(ShotValue.NotSet);
+			Add(DeliveryValue.NotSet);
+			Add(DeliveryValue.NotSet);
+			Add(DeliveryValue.NotSet);
 		}
 
 		/// <summary>
-		/// Sets the value of the item at the given index to <see cref="ShotValue.NotSet"/>.
+		/// Sets the value of the item at the given index to <see cref="DeliveryValue.NotSet"/>.
 		/// </summary>
 		/// <param name="index">
 		/// The index of the item to modify.
 		/// </param>
 		protected override void RemoveItem(int index)
 		{
-			Items[index] = ShotValue.NotSet;
+			Items[index] = DeliveryValue.NotSet;
 		}
 
 		/// <summary>
-		/// Sets the value of all items to <see cref="ShotValue.NotSet"/>.
+		/// Sets the value of all items to <see cref="DeliveryValue.NotSet"/>.
 		/// </summary>
 		protected override void ClearItems()
 		{
 			for (int i = 0; i < Items.Count; i++)
 			{
-				Items[i] = ShotValue.NotSet;
+				Items[i] = DeliveryValue.NotSet;
 			}
 		}
 	}
