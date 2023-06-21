@@ -7,6 +7,9 @@ namespace BowlingApp.Views
 	/// </summary>
 	public partial class FrameView : UserControl
 	{
+		/// <summary>
+		/// Creates a new instance of <see cref="FrameView"/>.
+		/// </summary>
 		public FrameView()
 		{
 			InitializeComponent();

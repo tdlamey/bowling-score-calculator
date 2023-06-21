@@ -3,18 +3,30 @@ using System.Linq;
 
 namespace BowlingApp.Models
 {
+	/// <summary>
+	/// A class for recording and evaluating the delivery values and total score for a frame.
+	/// </summary>
 	public class FrameModel : ModelBase
 	{
 		#region Constructors
+		/// <summary>
+		/// Creates a new instance of <see cref="FrameModel"/>.
+		/// </summary>
 		internal FrameModel() : this(false) { }
 
+		/// <summary>
+		/// Creates a new instance of <see cref="FrameModel"/>.
+		/// </summary>
+		/// <param name="isFinalFrame">
+		/// Indicates whether this is the final frame.
+		/// </param>
 		internal FrameModel(bool isFinalFrame)
 		{
 			IsFinalFrame = isFinalFrame;
 
 			Deliveries = new List<DeliveryModel>();
 
-			for (int i = 0; i < MaxShotCount; i++)
+			for (int i = 0; i < MaxDeliveryCount; i++)
 			{
 				Deliveries.Add(new DeliveryModel());
 			}
@@ -30,29 +42,66 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Properties
-		//No need to implement UI notification for this property because
-		// it is assigned in the constructor and cannot be changed after that.
+		/// <summary>
+		/// Indicates whether this is the final frame.
+		/// </summary>
+		/// <remarks>
+		/// This property may be used in binding, but does not implement UI notification
+		/// because it is assigned in the constructor and cannot be changed after that.
+		/// </remarks>
 		public bool IsFinalFrame { get; }
 
-		private int MaxShotCount
+		/// <summary>
+		/// The maximum number of deliveries allowed by the current frame.
+		/// </summary>
+		private int MaxDeliveryCount
 			=> IsFinalFrame ? 3 : 2;
 
+		/// <summary>
+		/// A collection of individual deliveries for the frame.
+		/// </summary>
 		internal List<DeliveryModel> Deliveries { get; }
 
+		/// <summary>
+		/// The display values for the individual deliveries.
+		/// </summary>
+		/// <remarks>
+		/// This is kept separate from the collection of individual deliveries,
+		/// as the method of display varies depending of the values of the individual deliveries.
+		/// </remarks>
 		public DeliveryDisplayCollection DeliveryDisplay { get; }
 
+		/// <summary>
+		/// The count of how many shots have been taken.
+		/// </summary>
 		internal int ShotsTaken
 			=> Deliveries.Count(shot => shot.HasValue);
 
+		/// <summary>
+		/// Indicates whether the frame has a strike value.
+		/// </summary>
 		internal bool HasStrike
 			=> Deliveries.Any(shot => shot.IsStrike);
 
+		/// <summary>
+		/// Indicates whether the frame has a spare value.
+		/// </summary>
 		internal bool HasSpare
 			=> Deliveries.Any(shot => shot.IsSpare);
 
+		/// <summary>
+		/// Indicates whether the frame is eligible for a score bonus.
+		/// </summary>
 		internal bool GetsBonusScore
 			=> !IsFinalFrame && (HasStrike || HasSpare);
 
+		/// <summary>
+		/// The total score for the current frame only.
+		/// </summary>
+		/// <remarks>
+		/// This value does not include the running total,
+		/// nor does it take into account any possible score bonus.
+		/// </remarks>
 		internal int FrameScoreSubtotal
 		{
 			get
@@ -173,11 +222,12 @@ namespace BowlingApp.Models
 		}
 
 		/// <summary>
-		/// 
+		/// The running total score, as of the current frame.
 		/// </summary>
 		/// <remarks>
-		/// This score value is a string so that it can be
-		/// blank in frames which have not yet been recorded.
+		/// This score value is a string rather than an integer,
+		/// so that it can be left blank in frames which have not
+		/// yet been recorded.
 		/// </remarks>
 		public string FrameScoreTotal
 		{
@@ -187,6 +237,9 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Methods
+		/// <summary>
+		/// Updates the display values for the individual deliveries.
+		/// </summary>
 		internal void UpdateDeliveryDisplay()
 		{
 			if (IsFinalFrame)
@@ -212,6 +265,16 @@ namespace BowlingApp.Models
 			}
 		}
 
+		/// <summary>
+		/// Calculates the bonus points given by the current frame,
+		/// based on the value of the previous frame's delivery.
+		/// </summary>
+		/// <param name="previousDeliveryValue">
+		/// The value of the previous delivery.
+		/// </param>
+		/// <returns>
+		/// Returns the bonus points given by the current frame.
+		/// </returns>
 		internal int CalculateBonusFor(string previousDeliveryValue)
 		{
 			int bonus = 0;

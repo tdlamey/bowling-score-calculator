@@ -7,6 +7,9 @@ namespace BowlingApp.Views
 	/// </summary>
 	public partial class ScoreEntryView : UserControl
 	{
+		/// <summary>
+		/// Creates a new instance of <see cref="ScoreEntryView"/>.
+		/// </summary>
 		public ScoreEntryView()
 		{
 			InitializeComponent();

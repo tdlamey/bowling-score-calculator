@@ -1,22 +1,43 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace BowlingApp
 {
+	/// <summary>
+	/// Provides members for notifying the user interface that a change has occurred.
+	/// </summary>
 	public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
 	{
+		/// <summary>
+		/// Occurs when a property value has changed.
+		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected static bool IsInDesignMode
-			=> DesignerProperties.GetIsInDesignMode(new DependencyObject());
-
+		/// <summary>
+		/// Notifies the user interface that the specified property has changed.
+		/// </summary>
+		/// <param name="propertyName">
+		/// The name of the property that changed.
+		/// </param>
 		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		/// <summary>
+		/// Sets the backing field and notifies the user interface that the specified property has changed.
+		/// </summary>
+		/// <typeparam name="TProperty"></typeparam>
+		/// <param name="backingField">
+		/// The backing field to be assigned.
+		/// </param>
+		/// <param name="newValue">
+		/// The new value to assign to the backing field.
+		/// </param>
+		/// <param name="propertyName">
+		/// The name of the property that changed.
+		/// </param>
 		protected void SetBackingFieldAndNotify<TProperty>(ref TProperty backingField, TProperty newValue, [CallerMemberName] string propertyName = null)
 		{
 			//Using the Check-And-Return style here to show its usage.

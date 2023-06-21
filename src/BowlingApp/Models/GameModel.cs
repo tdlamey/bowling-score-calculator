@@ -5,9 +5,15 @@ using System.Linq;
 
 namespace BowlingApp.Models
 {
+	/// <summary>
+	/// A class for recording and evaluating the frames, delivery values, and total score for a game.
+	/// </summary>
 	public class GameModel : ModelBase
 	{
 		#region Constructor
+		/// <summary>
+		/// Creates a new instance of <see cref="GameModel"/>.
+		/// </summary>
 		internal GameModel()
 		{
 			Frames = new List<FrameModel>();
@@ -24,7 +30,7 @@ namespace BowlingApp.Models
 
 			CurrentDeliveryAvailableValues = new ObservableCollection<string>();
 
-			UpdateAvailableShotValues();
+			UpdateAvailableDeliveryValues();
 		}
 		#endregion
 
@@ -35,22 +41,37 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// A collection of individual frames for the game.
+		/// </summary>
 		internal List<FrameModel> Frames { get; }
 
+		/// <summary>
+		/// The frame currently in progress.
+		/// </summary>
 		private FrameModel CurrentFrame
 		{
 			get => currentFrame;
 			set => SetBackingFieldAndNotify(ref currentFrame, value);
 		}
 
+		/// <summary>
+		/// The delivery currently next to be recorded.
+		/// </summary>
 		private DeliveryModel CurrentDelivery
 		{
 			get => currentDelivery;
 			set => SetBackingFieldAndNotify(ref currentDelivery, value);
 		}
 
+		/// <summary>
+		/// A collection of the possible delivery values for the current delivery.
+		/// </summary>
 		internal ObservableCollection<string> CurrentDeliveryAvailableValues { get; }
 
+		/// <summary>
+		/// The running total score for the game.
+		/// </summary>
 		public int TotalScore
 		{
 			get => totalScore;
@@ -59,15 +80,24 @@ namespace BowlingApp.Models
 		#endregion
 
 		#region Methods
-		internal void OnShotValueAssigned(string shotValue)
+		/// <summary>
+		/// Occurs when a delivery value is assigned.
+		/// </summary>
+		/// <param name="deliveryValue">
+		/// The value to assign.
+		/// </param>
+		/// <exception cref="ArgumentException">
+		/// The value is <paramref name="deliveryValue"/> is not valid.
+		/// </exception>
+		internal void OnDeliveryValueAssigned(string deliveryValue)
 		{
-			if (!CurrentDeliveryAvailableValues.Contains(shotValue))
+			if (!CurrentDeliveryAvailableValues.Contains(deliveryValue))
 			{
-				throw new ArgumentException("The provided value is not valid for the current shot.", nameof(shotValue));
+				throw new ArgumentException("The provided value is not valid for the current shot.", nameof(deliveryValue));
 			}
 
 			//Assign the shot value.
-			CurrentDelivery.Value = shotValue;
+			CurrentDelivery.Value = deliveryValue;
 			CurrentFrame.UpdateDeliveryDisplay();
 
 			//Update the current score.
@@ -86,7 +116,7 @@ namespace BowlingApp.Models
 					if (CurrentDelivery == CurrentFrame.Deliveries.First())
 					{
 						//Move to the next shot in the current frame.
-						MoveToNextShotInFrame();
+						MoveToNextDeliveryInFrame();
 					}
 					else
 					{
@@ -97,7 +127,7 @@ namespace BowlingApp.Models
 							CurrentFrame.Deliveries.First().IsStrike)
 						{
 							//Move to the next shot in the current frame.
-							MoveToNextShotInFrame();
+							MoveToNextDeliveryInFrame();
 						}
 						else
 						{
@@ -124,12 +154,15 @@ namespace BowlingApp.Models
 					else
 					{
 						//Move to the next shot in the current frame.
-						MoveToNextShotInFrame();
+						MoveToNextDeliveryInFrame();
 					}
 				}
 			}
 		}
 
+		/// <summary>
+		/// Moves focus to the first delivery of the next frame.
+		/// </summary>
 		private void MoveToNextFrame()
 		{
 			var next = Frames.IndexOf(CurrentFrame) + 1;
@@ -137,19 +170,25 @@ namespace BowlingApp.Models
 			CurrentFrame = Frames[next];
 			CurrentDelivery = CurrentFrame.Deliveries.First();
 
-			UpdateAvailableShotValues();
+			UpdateAvailableDeliveryValues();
 		}
 
-		private void MoveToNextShotInFrame()
+		/// <summary>
+		/// Moves focus to the next delivery of the current frame.
+		/// </summary>
+		private void MoveToNextDeliveryInFrame()
 		{
 			var next = CurrentFrame.Deliveries.IndexOf(CurrentDelivery) + 1;
 
 			CurrentDelivery = CurrentFrame.Deliveries[next];
 
-			UpdateAvailableShotValues();
+			UpdateAvailableDeliveryValues();
 		}
 
-		private void UpdateAvailableShotValues()
+		/// <summary>
+		/// Updates the available delivery values, based on the current state of the game.
+		/// </summary>
+		private void UpdateAvailableDeliveryValues()
 		{
 			List<string> shotValues;
 
@@ -176,11 +215,17 @@ namespace BowlingApp.Models
 			CurrentDeliveryAvailableValues.AddRange(shotValues);
 		}
 
+		/// <summary>
+		/// Disables score input.
+		/// </summary>
 		private void DisableInput()
 		{
 			CurrentDeliveryAvailableValues.Clear();
 		}
 
+		/// <summary>
+		/// Iterates through all frames and assigns scores where appropriate.
+		/// </summary>
 		private void UpdateScore()
 		{
 			int total = 0;
@@ -208,6 +253,21 @@ namespace BowlingApp.Models
 			TotalScore = total;
 		}
 
+		/// <summary>
+		/// Determines the bonus score for any given frame.
+		/// </summary>
+		/// <param name="currentFrame">
+		/// The frame for which to calculate the bonus score.
+		/// </param>
+		/// <returns>
+		/// Returns the bonus score for the given frame.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">
+		/// The value of <paramref name="currentFrame"/> is null.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// The frame referenced in <paramref name="currentFrame"/> is not found in the collection.
+		/// </exception>
 		private int GetScoreBonus(FrameModel currentFrame)
 		{
 			int bonus = 0;
